@@ -7,7 +7,7 @@
         public string Content { get; set; }
         public string? Author { get; set; }
         public DateTime CreatedAt { get; set; }
-        public virtual ICollection<Comment>? Comments { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 
     

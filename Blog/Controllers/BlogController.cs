@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Blog.Models; // Zmień na odpowiednią przestrzeń nazw
+using Blog.Models; 
 using System.Linq;
 using Blog.Data;
-using Blog.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 public class BlogController : Controller
@@ -11,7 +11,7 @@ public class BlogController : Controller
 
     public BlogController(BlogContext context)
     {
-        _context = context; // Przechowuj kontekst w polu
+        _context = context; 
     }
 
     public IActionResult Index()
@@ -38,4 +38,41 @@ public class BlogController : Controller
         }
         return View(post);
     }
+    [HttpPost]
+    public IActionResult AddComment(int id, string author, string content)
+    {
+        var blogPost = _context.BlogPosts.FirstOrDefault(p => p.Id == id);
+        if (blogPost == null)
+        {
+            return NotFound();
+        }
+
+        var comment = new Comment
+        {
+            BlogPostId = id,
+            Author = author,
+            Content = content,
+            CreatedAt = DateTime.Now
+        };
+
+        _context.Comments.Add(comment);
+        _context.SaveChanges();
+
+        return RedirectToAction("Details", new { id = id });
+    }
+    public IActionResult Details(int id)
+    {
+        var blogPost = _context.BlogPosts
+            .Include(p => p.Comments)
+            .FirstOrDefault(p => p.Id == id);
+
+        if (blogPost == null)
+        {
+            return NotFound();
+        }
+
+        return View(blogPost);
+    }
+
+
 }

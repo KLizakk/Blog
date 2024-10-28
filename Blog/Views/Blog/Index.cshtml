@@ -10,9 +10,19 @@
 {
     foreach (var post in Model)
     {
-        <h2>@post.Title</h2>
-        <p>@post.Content</p>
-        <p><small>Author: @post.Author, Created At: @post.CreatedAt</small></p>
+        <div class="post-summary">
+            <h2>@post.Title</h2>
+            <p>@post.Content</p>
+            <p>
+                <small>Author: @post.Author, Created At: @post.CreatedAt</small>
+                <br />
+                <small>@(post.Comments != null ? post.Comments.Count : 0) comments</small>
+            </p>
+            <p>
+                <a asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-info">View Details</a>
+            </p>
+        </div>
+        <hr />
     }
 }
 else
