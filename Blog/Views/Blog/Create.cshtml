@@ -1,0 +1,16 @@
+﻿@model Blog.Models.BlogPost
+
+<h1>Nowy post</h1>
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.Title)
+    @Html.TextBoxFor(m => m.Title)
+
+    @Html.LabelFor(m => m.Content)
+    @Html.TextAreaFor(m => m.Content)
+
+    @Html.Label("Author")
+    @Html.TextBox("Author")
+
+    <input type="submit" value="Zapisz" />
+}

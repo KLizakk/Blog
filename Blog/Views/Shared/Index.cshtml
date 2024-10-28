@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Blog.Models.BlogPost>
+
+<h1>Blog</h1>
+<p>
+    <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">Dodaj nowy post</a>
+</p>
+
+
+@if (Model != null && Model.Any())
+{
+    foreach (var post in Model)
+    {
+        <h2>@post.Title</h2>
+        <p>@post.Content</p>
+        <p><small>Autor: @post.Author, @post.CreatedAt</small></p>
+        @foreach (var comment in post.Comments)
+        {
+            <div>
+                <strong>@comment.Author:</strong> @comment.Content
+            </div>
+        }
+    }
+}
+else
+{
+    <p>Brak postów.</p>
+}
+
