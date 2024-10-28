@@ -16,7 +16,10 @@ public class BlogController : Controller
 
     public IActionResult Index()
     {
-        var posts = _context.BlogPosts.ToList();
+       
+        var posts = _context.BlogPosts
+            .Include(p => p.Comments) 
+            .ToList();
         return View(posts);
     }
 

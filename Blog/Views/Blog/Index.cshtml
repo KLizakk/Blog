@@ -1,31 +1,29 @@
 ﻿@model IEnumerable<Blog.Models.BlogPost>
 
-<h1>Blog Posts</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Blog</h1>
 
-<p>
-    <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">Add New Post</a>
-</p>
+    <p>
+        <a asp-controller="Blog" asp-action="Create" class="btn btn-success mb-4">Add New Post</a>
+    </p>
 
-@if (Model != null && Model.Any())
-{
-    foreach (var post in Model)
+    @if (Model != null && Model.Any())
     {
-        <div class="post-summary">
-            <h2>@post.Title</h2>
-            <p>@post.Content</p>
-            <p>
-                <small>Author: @post.Author, Created At: @post.CreatedAt</small>
-                <br />
-                <small>@(post.Comments != null ? post.Comments.Count : 0) comments</small>
-            </p>
-            <p>
-                <a asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-info">View Details</a>
-            </p>
+        <div class="list-group">
+            @foreach (var post in Model)
+            {
+                <div class="list-group-item mb-3 p-4">
+                    <h2 class="h5 mb-2">@post.Title</h2>
+                    <p class="mb-1 text-muted small">Author: @post.Author | Created At: @post.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                    <p class="mb-3">@post.Content</p>
+                    <p class="mb-1 text-muted small">Comments: @(post.Comments?.Count ?? 0)</p>
+                    <a asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-info btn-sm mt-2">View Details</a>
+                </div>
+            }
         </div>
-        <hr />
     }
-}
-else
-{
-    <p>No blog posts available.</p>
-}
+    else
+    {
+        <p class="text-muted">No blog posts available.</p>
+    }
+</div>

@@ -1,28 +1,49 @@
 ﻿@model IEnumerable<Blog.Models.BlogPost>
 
-<h1>Blog</h1>
-<p>
-    <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">Dodaj nowy post</a>
-</p>
+<div class="container mt-5">
+    <h1 class="mb-4">Blog</h1>
+    <p>
+        <a asp-controller="Blog" asp-action="Create" class="btn btn-primary mb-4">Add New Post</a>
+    </p>
 
-
-@if (Model != null && Model.Any())
-{
-    foreach (var post in Model)
+    @if (Model != null && Model.Any())
     {
-        <h2>@post.Title</h2>
-        <p>@post.Content</p>
-        <p><small>Autor: @post.Author, @post.CreatedAt</small></p>
-        @foreach (var comment in post.Comments)
-        {
-            <div>
-                <strong>@comment.Author:</strong> @comment.Content
-            </div>
-        }
-    }
-}
-else
-{
-    <p>Brak postów.</p>
-}
+        <div class="list-group">
+            @foreach (var post in Model)
+            {
+                <div class="list-group-item mb-3">
+                    <h2 class="mb-1">@post.Title</h2>
+                    <p>@post.Content</p>
+                    <p class="text-muted">
+                        Author: @post.Author | Created At: @post.CreatedAt.ToString("MMMM dd, yyyy")
+                    </p>
 
+                    @if (post.Comments != null && post.Comments.Any())
+                    {
+                        <h5 class="mt-3">Comments</h5>
+                        <div class="list-group mt-2">
+                            @foreach (var comment in post.Comments)
+                            {
+                                <div class="list-group-item">
+                                    <strong>@comment.Author:</strong> @comment.Content
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No comments yet.</p>
+                    }
+
+                    <div class="mt-3">
+                        <a asp-controller="Blog" asp-action="Details" asp-route-id="@post.Id" class="btn btn-info">View Details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No blog posts available.</p>
+    }
+</div>

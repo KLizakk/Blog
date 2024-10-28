@@ -1,16 +1,23 @@
 ﻿@model Blog.Models.BlogPost
 
-<h1>Nowy post</h1>
-@using (Html.BeginForm())
+<h1 class="mb-4">Nowy Post</h1>
+
+@using (Html.BeginForm("Create", "Blog", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
 {
-    @Html.LabelFor(m => m.Title)
-    @Html.TextBoxFor(m => m.Title)
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Title, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Title, new { @class = "form-control", placeholder = "Dodaj tytuł posta" })
+    </div>
 
-    @Html.LabelFor(m => m.Content)
-    @Html.TextAreaFor(m => m.Content)
+    <div class="form-group mb-3">
+        @Html.LabelFor(m => m.Content, new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Content, new { @class = "form-control", rows = 5, placeholder = "Dodaj treść posta" })
+    </div>
 
-    @Html.Label("Author")
-    @Html.TextBox("Author")
+    <div class="form-group mb-4">
+        @Html.Label("Author", "Author", new { @class = "form-label" }) <!-- Corrected Line -->
+        @Html.TextBox("Author", null, new { @class = "form-control", placeholder = "Nazwa autora" })
+    </div>
 
-    <input type="submit" value="Zapisz" />
+    <button type="submit" class="btn btn-primary">Save</button>
 }

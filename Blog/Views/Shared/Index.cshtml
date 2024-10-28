@@ -1,28 +1,42 @@
 ﻿@model IEnumerable<Blog.Models.BlogPost>
 
-<h1>Blog</h1>
-<p>
-    <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">Dodaj nowy post</a>
-</p>
+<h1 class="text-center my-4">Blog</h1>
 
+<div class="text-center mb-4">
+    <a asp-controller="Blog" asp-action="Create" class="btn btn-primary">Dodaj nowy post</a>
+</div>
 
 @if (Model != null && Model.Any())
 {
-    foreach (var post in Model)
-    {
-        <h2>@post.Title</h2>
-        <p>@post.Content</p>
-        <p><small>Autor: @post.Author, @post.CreatedAt</small></p>
-        @foreach (var comment in post.Comments)
+    <div class="container">
+        @foreach (var post in Model)
         {
-            <div>
-                <strong>@comment.Author:</strong> @comment.Content
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">@post.Title</h2>
+                    <p class="card-text">@post.Content</p>
+                    <p class="text-muted">
+                        <small>Autor: @post.Author, @post.CreatedAt</small>
+                    </p>
+                    @if (post.Comments != null && post.Comments.Any())
+                    {
+                        <h5 class="mt-3">Komentarze:</h5>
+                        @foreach (var comment in post.Comments)
+                        {
+                            <div class="border p-2 my-2">
+                                <strong>@comment.Author:</strong>
+                                <p>@comment.Content</p>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
         }
-    }
+    </div>
 }
 else
 {
-    <p>Brak postów.</p>
+    <div class="alert alert-warning text-center">
+        <strong>Brak postów.</strong>
+    </div>
 }
-

@@ -1,36 +1,43 @@
 ﻿@model Blog.Models.BlogPost
 
-<h1>@Model.Title</h1>
-<p>@Model.Content</p>
-<p><small>Author: @Model.Author, Created At: @Model.CreatedAt</small></p>
+<div class="container mt-5">
+    <h1 class="mb-3">@Model.Title</h1>
+    <p class="lead">@Model.Content</p>
+    <p class="text-muted">Author: @Model.Author | Created At: @Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
 
-<h3>Comments</h3>
-@if (Model.Comments != null && Model.Comments.Any())
-{
-    foreach (var comment in Model.Comments)
+    <hr />
+
+    <h3 class="mt-5">Comments</h3>
+    @if (Model.Comments != null && Model.Comments.Any())
     {
-        <div>
-            <strong>@comment.Author:</strong> @comment.Content
-            <p><small>Posted on @comment.CreatedAt</small></p>
+        <div class="list-group mb-4">
+            @foreach (var comment in Model.Comments)
+            {
+                <div class="list-group-item">
+                    <p><strong>@comment.Author</strong></p>
+                    <p>@comment.Content</p>
+                    <small class="text-muted">Posted on @comment.CreatedAt.ToString("MMMM dd, yyyy HH:mm")</small>
+                </div>
+            }
         </div>
     }
-}
-else
-{
-    <p>No comments yet.</p>
-}
+    else
+    {
+        <p class="text-muted">No comments yet.</p>
+    }
 
-<h3>Add a Comment</h3>
-@using (Html.BeginForm("AddComment", "Blog", FormMethod.Post))
-{
-    @Html.HiddenFor(m => m.Id)
-    <div>
-        @Html.Label("Author")
-        @Html.TextBox("Author", null, new { @class = "form-control" })
-    </div>
-    <div>
-        @Html.Label("Content")
-        @Html.TextArea("Content", null, new { @class = "form-control" })
-    </div>
-    <input type="submit" value="Add Comment" class="btn btn-primary" />
-}
+    <h3 class="mt-4">Add a Comment</h3>
+    @using (Html.BeginForm("AddComment", "Blog", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.Id)
+        <div class="mb-3">
+            @Html.Label("Author", "Author", new { @class = "form-label" })
+            <input type="text" name="Author" class="form-control" placeholder="Your name" />
+        </div>
+        <div class="mb-3">
+            @Html.Label("Content", "Content", new { @class = "form-label" })
+            <textarea name="Content" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Comment</button>
+    }
+</div>

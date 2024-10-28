@@ -1,19 +1,38 @@
 using Blog.Data;
 using Microsoft.EntityFrameworkCore;
-using Blog.Models; // Zmie? na odpowiedni? przestrze? nazw
+using Blog.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Dodaj us?ugi do kontenera.
 builder.Services.AddControllersWithViews();
 
-// Skonfiguruj DbContext z u?yciem connection string
 builder.Services.AddDbContext<BlogContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Skonfiguruj potok ??da? HTTP.
+// Check if any data exists in the Blog table
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
+
+    
+    if (await dbContext.BlogPosts.AnyAsync())
+    {
+        
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Blog}/{action=Index}/{id?}");
+    }
+    else
+    {
+        
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+    }
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -26,9 +45,5 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
